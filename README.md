@@ -29,6 +29,18 @@ You will be dropped into a shell inside the container's `/build/openwrt` directo
 
 > After you `exit` out of that shell, the Docker container will stop, but will not be removed. If you want to jump back into it, you can run `docker start openwrt-build` and `docker attach openwrt-build`.
 
+## Apply the EMC2301 Patch
+Switch to the `openwrt-22.03` branch, the dockerfile doesn't do it itself for some reason:
+`git switch openwrt-22.03`
+
+Run `git apply --reject --whitespace=fix emc2301-openwrt.patch` to update the kernel and create the required files. To activate, add the following to `/boot/config.txt`:
+
+```
+dtparam=i2c_vc=on
+dtoverlay=i2c_csi_dsi
+dtoverlay=cm4io-fan,minrpm=1000,maxrpm=5000
+```
+
 ## Configure a custom OpenWRT build
 
 The container should have OpenWRT's source code checked out inside he `/build/openwrt` directory. If you would like, run `git pull` inside the directory to make sure the latest OpenWRT changes are present.
@@ -62,6 +74,7 @@ Then select additional packages and configuration. for the Waveshare board, I ad
       - Kernel modules > USB Support > `kmod-usb-serial-qualcomm`
       - Kernel modules > USB Support > `kmod-usb-serial-sierrawireless`
       - Kernel modules > USB Support > `kmod-usb-wdm`
+      - Kernel modules > USB Support > `kmod-mt76`
     1. ModemManager setup:
       - Network > `modemmanager`
       - LuCI > 5. Protocols > `luci-proto-modemmanager`
