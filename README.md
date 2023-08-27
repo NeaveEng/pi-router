@@ -40,6 +40,8 @@ dtparam=i2c_vc=on
 dtoverlay=i2c_csi_dsi
 dtoverlay=cm4io-fan,minrpm=1000,maxrpm=5000
 ```
+Thanks to @shayne and @geerlingguy for their work on this! 
+
 
 ## Configure a custom OpenWRT build
 
